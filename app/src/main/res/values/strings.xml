@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">JuegoAhorcado</string>
+    <string name="Introduce_letra">Introduce letra</string>
 </resources>
