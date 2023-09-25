@@ -2,13 +2,12 @@ package com.damjms.iessanalberto
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-
 class MainActivity : AppCompatActivity() {
-    // Variables para los elementos de la interfaz
     private lateinit var edtIntentos: EditText
     private lateinit var edtIntroduceLetra: EditText
     private lateinit var btnComprobar: Button
@@ -16,19 +15,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var edtLetrasNoEstan: EditText
     private lateinit var txtGameOver: TextView
 
-    // Palabra secreta y estado actual mostrado al usuario
-    private var palabraSecreta = "Kotlin"
-    private var palabraMostrada = "*".repeat(palabraSecreta.length)
-
-    // Letras incorrectas y número de intentos
-    private var letrasNoEstan: MutableSet<Char> = mutableSetOf()
+    private var palabraSecreta = "KOTLIN"
     private var numIntentos = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inicialización de elementos de la interfaz
         edtIntentos = findViewById(R.id.edtIntentos)
         edtIntroduceLetra = findViewById(R.id.edtIntroduceLetra)
         btnComprobar = findViewById(R.id.btnComprobar)
@@ -36,57 +29,83 @@ class MainActivity : AppCompatActivity() {
         edtLetrasNoEstan = findViewById(R.id.edtLetrasNoEstan)
         txtGameOver = findViewById(R.id.txtGameOver)
 
-        // Configuración inicial de los elementos de la interfaz
-        edtIntentos.setText(numIntentos.toString())
-        edtPalabra.setText(palabraMostrada)
+        // para que solo pueda escribir una letra cada vez
+        edtIntroduceLetra.filters = arrayOf(InputFilter.LengthFilter(1))
 
         btnComprobar.setOnClickListener {
-            // Obtención de la letra introducida por el usuario
-            val letra = edtIntroduceLetra.text.toString().uppercase().getOrNull(0)
-
-            if (letra != null) {
+            //guardo la letra introducida por el usuario transformandola a mayuscula
+            val letra = edtIntroduceLetra.text.toString().uppercase()
+            if (letra.isNotEmpty()) {
+                //busco si existe la letra dentro de la palabra secreta
                 if (palabraSecreta.contains(letra)) {
                     actualizarPalabraMostrada(letra)
+                    comprobarLetraIntento()
                 } else {
-                    letrasNoEstan.add(letra)
-                    edtLetrasNoEstan.setText(letrasNoEstan.joinToString(" ") { "_" })
-                    decrementarIntento()
+                    comprobarLetraIntento()
+                    actualizarLetrasIncorrectas(letra)
                 }
             }
 
-            if (palabraMostrada == palabraSecreta) {
-                // Mostrar mensaje de victoria si se adivina la palabra
-                txtGameOver.text = "¡GANASTE!"
+        }
+    }
+
+    private fun actualizarPalabraMostrada(letra: String) {
+        // guardo la letra introducida por el usuario separada en caracteres
+        val palabraMostrada = edtPalabra.text.toString().toCharArray()
+        var palabraAdivinada = true
+
+        // itero sobre la palabra secrea
+        for (i in 0 until palabraSecreta.length) {
+            // guardo la posicion de la letras letras de la palabra secreta
+            val letraSecreta = palabraSecreta[i]
+
+            // comparo la letra secreta con la letra introducia por el usuario y su posicion
+            if (letraSecreta == letra[0]) {
+                // si coincide actualizo la letra en su posicion en la palabra que se muestra en pantalla
+                palabraMostrada[i] = letraSecreta
+            }
+            // cuando se adivine una letra le quito el *
+            if (palabraMostrada[i] == '*') {
+                palabraAdivinada = false
+            }
+        }
+        // actualizo las letras de la palabra mostrada en pantalla
+        edtPalabra.setText(String(palabraMostrada))
+    }
+
+    private fun actualizarLetrasIncorrectas(letra: String) {
+        // guardo las letras incorrectas
+        val letrasIncorrectas = edtLetrasNoEstan.text.toString()
+        val nuevasLetrasIncorrectas = StringBuilder()
+
+        // comparo la letra incorrecta con la letra introducida por el usuario
+        if (!letrasIncorrectas.contains(letra)) {
+            // si no esta la añado a la lista de letras incorrectas
+            nuevasLetrasIncorrectas.append(letrasIncorrectas)
+            nuevasLetrasIncorrectas.append(letra)
+        }
+        // actualizo las letras incorrectas mostradas en pantalla
+        edtLetrasNoEstan.setText(nuevasLetrasIncorrectas.toString())
+    }
+
+    private fun comprobarLetraIntento() {
+        val palabraMostrada = edtPalabra.text.toString()
+        if (!palabraMostrada.contains('*')) {
+            // Muestra el mensaje de victoria si todas las letras han sido adivinadas
+            txtGameOver.text = "CORRECTO. La palabra es: $palabraSecreta"
+            txtGameOver.visibility = View.VISIBLE
+            btnComprobar.isEnabled = false
+        } else if (!palabraSecreta.contains(edtIntroduceLetra.text.toString().uppercase())) {
+            // Decrement the number of attempts only if the guessed letter is incorrect
+            numIntentos--
+            edtIntentos.setText(numIntentos.toString())
+
+            if (numIntentos == 0) {
+                // saco el mensaje de GAME OVER si se agotan los intentos
+                txtGameOver.text = "GAME OVER. La palabra era: $palabraSecreta"
                 txtGameOver.visibility = View.VISIBLE
                 btnComprobar.isEnabled = false
             }
-
-            edtIntroduceLetra.text.clear()
-        }
-    }
-
-    private fun actualizarPalabraMostrada(letra: Char) {
-        // Actualizar la palabra mostrada al usuario con la letra adivinada
-        val nuevaPalabraMostrada = palabraMostrada.toCharArray()
-        for (i in palabraSecreta.indices) {
-            if (palabraSecreta[i] == letra) {
-                nuevaPalabraMostrada[i] = letra
-            }
-        }
-        palabraMostrada = nuevaPalabraMostrada.joinToString(" ")
-        edtPalabra.setText(palabraMostrada)
-    }
-
-    private fun decrementarIntento() {
-        // Decrementar el número de intentos y actualizar la interfaz
-        numIntentos--
-        edtIntentos.setText(numIntentos.toString())
-
-        if (numIntentos == 0) {
-            // Mostrar mensaje de fin de juego si se agotan los intentos
-            txtGameOver.text = "GAME OVER. La palabra era: $palabraSecreta"
-            txtGameOver.visibility = View.VISIBLE
-            btnComprobar.isEnabled = false
         }
     }
 }
