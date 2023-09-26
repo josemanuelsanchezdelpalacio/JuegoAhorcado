@@ -10,53 +10,55 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AHORCADO" />
+        android:text="@string/AHORCADO" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Numero de intentos" />
+        android:text="@string/Numero_intentos" />
 
     <EditText
         android:id="@+id/edtIntentos"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="5"/>
 
     <EditText
         android:id="@+id/edtIntroduceLetra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/Introduce_letra" />
+        android:hint="@string/Introduce_letra"
+        android:textAlignment="center"/>
 
     <Button
         android:id="@+id/btnComprobar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="COMPROBAR"/>
+        android:text="@string/COMPROBAR"/>
 
     <EditText
         android:id="@+id/edtPalabra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="* * * * *"/>
+        android:text="* * * *"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No estan" />
+        android:text="@string/Letras_incorrectas" />
 
     <EditText
         android:id="@+id/edtLetrasNoEstan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="_ _ _ _ _"
+        android:text="_ _ _ _"
         android:enabled="false"/>
 
     <TextView
         android:id="@+id/txtGameOver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GAME OVER"
+        android:text="@string/GAME_OVER"
         android:visibility="invisible"/>
 
 </LinearLayout>

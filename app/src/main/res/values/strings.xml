@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">JuegoAhorcado</string>
+    <string name="AHORCADO">AHORCADO</string>
+    <string name="Numero_intentos">Numero de intentos</string>
     <string name="Introduce_letra">Introduce letra</string>
+    <string name="COMPROBAR">COMPROBAR</string>
+    <string name="Letras_incorrectas">Letras incorrectas</string>
+    <string name="GAME_OVER">GAME OVER</string>
 </resources>

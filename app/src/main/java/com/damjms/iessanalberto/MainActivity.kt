@@ -36,16 +36,18 @@ class MainActivity : AppCompatActivity() {
             //guardo la letra introducida por el usuario transformandola a mayuscula
             val letra = edtIntroduceLetra.text.toString().uppercase()
             if (letra.isNotEmpty()) {
-                //busco si existe la letra dentro de la palabra secreta
+                //busco si existe la letra dentro de la palabra secreta.
+                //si existe actualiza la palabra mostrada y si no las letras incorrectas
                 if (palabraSecreta.contains(letra)) {
                     actualizarPalabraMostrada(letra)
                     comprobarLetraIntento()
                 } else {
-                    comprobarLetraIntento()
                     actualizarLetrasIncorrectas(letra)
+                    comprobarLetraIntento()
                 }
             }
-
+            //limpio la entrada por pantalla cada vez que se pulsa el boton
+            edtIntroduceLetra.text.clear()
         }
     }
 
@@ -70,19 +72,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // actualizo las letras de la palabra mostrada en pantalla
-        edtPalabra.setText(String(palabraMostrada))
+        edtPalabra.setText(palabraMostrada.toString())
     }
 
     private fun actualizarLetrasIncorrectas(letra: String) {
         // guardo las letras incorrectas
         val letrasIncorrectas = edtLetrasNoEstan.text.toString()
-        val nuevasLetrasIncorrectas = StringBuilder()
+        // creo una lista de strings para guardar las letras incorrectas
+        val nuevasLetrasIncorrectas = mutableListOf<String>()
 
         // comparo la letra incorrecta con la letra introducida por el usuario
         if (!letrasIncorrectas.contains(letra)) {
-            // si no esta la añado a la lista de letras incorrectas
-            nuevasLetrasIncorrectas.append(letrasIncorrectas)
-            nuevasLetrasIncorrectas.append(letra)
+            // si no esta la añado a la lista de letras incorrectas y tambien añado las letras que ya se han usado
+            nuevasLetrasIncorrectas.add(letrasIncorrectas)
+            nuevasLetrasIncorrectas.add(letra)
         }
         // actualizo las letras incorrectas mostradas en pantalla
         edtLetrasNoEstan.setText(nuevasLetrasIncorrectas.toString())
@@ -91,12 +94,13 @@ class MainActivity : AppCompatActivity() {
     private fun comprobarLetraIntento() {
         val palabraMostrada = edtPalabra.text.toString()
         if (!palabraMostrada.contains('*')) {
-            // Muestra el mensaje de victoria si todas las letras han sido adivinadas
+            // saca el mensaje de palabra correcta si todas las letras han sido adivinadas
             txtGameOver.text = "CORRECTO. La palabra es: $palabraSecreta"
             txtGameOver.visibility = View.VISIBLE
             btnComprobar.isEnabled = false
+            //si la palabra no contiene la letra que se ha introducido
         } else if (!palabraSecreta.contains(edtIntroduceLetra.text.toString().uppercase())) {
-            // Decrement the number of attempts only if the guessed letter is incorrect
+            // resta un intento cada vez que se falla una letra. Si llega a 0 intentos sale GAME OVER
             numIntentos--
             edtIntentos.setText(numIntentos.toString())
 
