@@ -40,7 +40,7 @@
         android:id="@+id/edtPalabra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="* * * *"/>
+        android:text="* * * * *"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
         android:id="@+id/edtLetrasNoEstan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="_ _ _ _"
+        android:text="_ _ _ _ _"
         android:enabled="false"/>
 
     <TextView

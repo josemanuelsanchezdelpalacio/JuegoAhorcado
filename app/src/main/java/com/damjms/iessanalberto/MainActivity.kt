@@ -36,14 +36,13 @@ class MainActivity : AppCompatActivity() {
             //guardo la letra introducida por el usuario transformandola a mayuscula
             val letra = edtIntroduceLetra.text.toString().uppercase()
             if (letra.isNotEmpty()) {
-                //busco si existe la letra dentro de la palabra secreta.
-                //si existe actualiza la palabra mostrada y si no las letras incorrectas
+                //busco si existe la letra dentro de la palabra secreta
                 if (palabraSecreta.contains(letra)) {
                     actualizarPalabraMostrada(letra)
                     comprobarLetraIntento()
                 } else {
-                    actualizarLetrasIncorrectas(letra)
                     comprobarLetraIntento()
+                    actualizarLetrasIncorrectas(letra)
                 }
             }
             //limpio la entrada por pantalla cada vez que se pulsa el boton
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // actualizo las letras de la palabra mostrada en pantalla
-        edtPalabra.setText(palabraMostrada.toString())
+        edtPalabra.setText(String(palabraMostrada))
     }
 
     private fun actualizarLetrasIncorrectas(letra: String) {
