@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
     private fun actualizarPalabraMostrada(letra: String) {
         // guardo la letra introducida por el usuario separada en caracteres
         val palabraMostrada = edtPalabra.text.toString().toCharArray()
-        var palabraAdivinada = true
 
         // itero sobre la palabra secrea
         for (i in 0 until palabraSecreta.length) {
@@ -64,10 +63,6 @@ class MainActivity : AppCompatActivity() {
             if (letraSecreta == letra[0]) {
                 // si coincide actualizo la letra en su posicion en la palabra que se muestra en pantalla
                 palabraMostrada[i] = letraSecreta
-            }
-            // cuando se adivine una letra le quito el *
-            if (palabraMostrada[i] == '*') {
-                palabraAdivinada = false
             }
         }
         // actualizo las letras de la palabra mostrada en pantalla
